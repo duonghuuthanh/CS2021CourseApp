@@ -35,10 +35,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'courses.apps.CoursesConfig'
+    'courses.apps.CoursesConfig',
+    'ckeditor',
+    'ckeditor_uploader',
+    'debug_toolbar'
 ]
 
+CKEDITOR_UPLOAD_PATH = "ckeditor/images/"
+
+
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -46,10 +53,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 import pymysql
-
 pymysql.install_as_MySQLdb()
 
 ROOT_URLCONF = 'courseapp.urls'
@@ -84,6 +91,12 @@ DATABASES = {
         'HOST': ''  # mặc định localhost
     }
 }
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+MEDIA_ROOT = '%s/courses/static/' % BASE_DIR
 
 AUTH_USER_MODEL = 'courses.User'
 
