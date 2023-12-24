@@ -40,11 +40,26 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'debug_toolbar',
     'rest_framework',
-    'drf_yasg'
+    'drf_yasg',
+    'cloudinary',
+    'oauth2_provider'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
 
 CKEDITOR_UPLOAD_PATH = "ckeditor/images/"
 
+import cloudinary
+
+cloudinary.config(
+    cloud_name="dxxwcby8l",
+    api_key="448651448423589",
+    api_secret="ftGud0r1TTqp0CGp5tjwNmkAm-A"
+)
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -140,3 +155,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CLIENT_ID = 'fNeHg1T9dkyHujvr9MN0InG6jeO1aItTi6hu4j4O'
+CLIENT_SECRET = 'fEcilW0YbekOELRvcjPkAYHjJ3EvSHdGumP1PAUxRxcuGHYoV8MJtgmyWlBlCmLVqB91wzyQvwz139U6KIailoBAutzI3JC62YJDlz1YM8wRj2USJVoWhUAy7how0Fq1'

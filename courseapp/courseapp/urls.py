@@ -37,6 +37,8 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('', include('courses.urls')),
     path('admin/', admin_site.urls),
+    path('o/', include('oauth2_provider.urls',
+                       namespace='oauth2_provider')),
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
     path("__debug__/", include("debug_toolbar.urls")),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
