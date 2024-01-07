@@ -66,3 +66,14 @@ class Interaction(BaseModel):
 
 class Comment(Interaction):
     content = models.CharField(max_length=255, null=False)
+
+
+class Like(Interaction):
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('user', 'lesson')
+
+
+class Rating(Interaction):
+    rate = models.SmallIntegerField(default=0)
