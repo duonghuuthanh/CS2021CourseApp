@@ -3,8 +3,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
     container: {
         flex: 1,
-        margin: 5,
-        marginTop: 50,
+        margin: 5
     }, row: {
         flexDirection: "row"
     }, subject: {
@@ -15,7 +14,8 @@ export default StyleSheet.create({
     }, m_10: {
         margin: 6
     }, title: {
-        fontSize: 16,
-        fontWeight: "bold"
+        fontSize: 20,
+        fontWeight: "bold", 
+        color: "green"
     }
 });
