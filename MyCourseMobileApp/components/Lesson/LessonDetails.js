@@ -1,16 +1,21 @@
-import { View, Text, ActivityIndicator, Image } from "react-native"
+import { View, Text, ActivityIndicator, Image, Dimensions, TextInput, TouchableOpacity,  ScrollView } from "react-native"
 import MyStyles from "../../styles/MyStyles"
-import React from 'react'
-import API, { endpoints } from "../../configs/API";
+import React, { useContext } from 'react'
+import API, { authApi, endpoints } from "../../configs/API";
 import Styles from "./Styles";
 import RenderHTML from "react-native-render-html";
-import { ScrollView } from "react-native-gesture-handler";
+import MyContext from "../../configs/MyContext";
 import moment from "moment";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const {height} = Dimensions.get('window');
 
 const LessonDetails = ({route}) => {
     const [lesson, setLesson] = React.useState(null);
     const [comments, setComments] = React.useState(null);
+    const [content, setContent] = React.useState();
     const {lessonId} = route.params;
+    const [user, ] = useContext(MyContext);
 
     React.useEffect(() => {
         const loadLesson = async () => {
@@ -35,8 +40,21 @@ const LessonDetails = ({route}) => {
         loadComments();
     }, [lessonId]);
 
+
+    const addComment = async () => {
+        try {
+            let token = await AsyncStorage.getItem('access-token');
+            let res = await authApi(token).post(endpoints['add-comment'](lessonId), {
+                'content': content
+            })
+            setComments(current => [res.data, ...current]);
+        } catch (ex) {
+            console.error(ex);
+        }
+    }
+
     return (
-        <View style={MyStyles.container}>
+        <ScrollView style={MyStyles.container}>
             <Text style={MyStyles.subject}>CHI TIẾT BÀI HỌC</Text>
             {lesson===null?<ActivityIndicator />:<>
                 <View style={MyStyles.row}>
@@ -49,10 +67,19 @@ const LessonDetails = ({route}) => {
                     </View>
                     
                 </View>
-                <ScrollView>
+                <ScrollView style={{height: height*0.6}}>
                     <RenderHTML source={{html: lesson.content}} />
                 </ScrollView>
                 <ScrollView>
+                    {user===null?"":<>
+                    <View style={[MyStyles.row, {alignItems: "center", justifyContent: "center"}]}>
+                        <TextInput value={content} onChangeText={t => setContent(t)} style={Styles.comment} placeholder="Nội dung bình luận" />
+                        <TouchableOpacity onPress={addComment}>
+                            <Text style={Styles.button}>Bình luận</Text>
+                        </TouchableOpacity>
+                    </View>
+                    </>}
+                    
                 {comments===null?<ActivityIndicator />:<>
                     {comments.map(c => <View style={MyStyles.row} key={c.id}>
                         <Image source={{uri: c.user.image}} style={[MyStyles.m_10, Styles.thumb]} />
@@ -64,7 +91,7 @@ const LessonDetails = ({route}) => {
                 </>}
                 </ScrollView>
             </>}
-        </View>
+        </ScrollView>
     )
 }
 

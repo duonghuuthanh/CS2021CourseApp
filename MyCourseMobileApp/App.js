@@ -5,22 +5,37 @@ import { useEffect, useState } from "react/cjs/react.production.min";
 import Home from "./components/Home/Home";
 import Login from "./components/User/Login";
 import API, { endpoints } from "./configs/API";
-import React from 'react'
+import React, { useReducer } from 'react'
 import Lesson from "./components/Lesson/Lesson";
 import LessonDetails from "./components/Lesson/LessonDetails";
+import MyContext from "./configs/MyContext";
+import MyUserReducer from "./reducers/MyUserReducer";
+import Logout from "./components/User/Logout";
+import Register from "./components/User/Register";
 
 const Drawer = createDrawerNavigator();
 
 const App = () => {
+  const [user, dispatch] = useReducer(MyUserReducer, null);
+
   return (
-    <NavigationContainer>
-      <Drawer.Navigator drawerContent={MyDrawerItem}>
-        <Drawer.Screen name="Home" component={Home} options={{title: 'Khóa học'}} />
-        <Drawer.Screen name="Lesson" component={Lesson} options={{title: "Bài học", drawerItemStyle: {display: "none"}}} />
-        <Drawer.Screen name="LessonDetails" component={LessonDetails} options={{title: "Chi tiết bài học", drawerItemStyle: {display: "none"}}} />
-        <Drawer.Screen name="Login" component={Login} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <MyContext.Provider value={[user, dispatch]}>
+      <NavigationContainer>
+        <Drawer.Navigator drawerContent={MyDrawerItem} screenOptions={{headerRight: Logout}}>
+          <Drawer.Screen name="Home" component={Home} options={{title: 'Khóa học'}} />
+          <Drawer.Screen name="Lesson" component={Lesson} options={{title: "Bài học", drawerItemStyle: {display: "none"}}} />
+          <Drawer.Screen name="LessonDetails" component={LessonDetails} options={{title: "Chi tiết bài học", drawerItemStyle: {display: "none"}}} />
+          
+          {user===null?<>
+            <Drawer.Screen name="Login" component={Login} />
+            <Drawer.Screen name="Register" component={Register} />
+          </>:<>
+            <Drawer.Screen name={user.username} component={Home} />
+          </>}
+          
+        </Drawer.Navigator>
+      </NavigationContainer>
+    </MyContext.Provider>
   )
 }
 

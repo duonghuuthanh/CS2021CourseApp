@@ -19,5 +19,15 @@ export default StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 10
+    },
+    comment: {
+        width: 300,
+        backgroundColor: "lightgray",
+        padding: 5
+    }, button: {
+        textAlign: "center",
+        backgroundColor: "darkblue",
+        color: "white",
+        padding: 10
     }
 })
